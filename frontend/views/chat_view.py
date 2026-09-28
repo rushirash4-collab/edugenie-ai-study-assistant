@@ -5,17 +5,17 @@ Answers doubts, explains solutions, and debugs code with optional reference docu
 
 import streamlit as st
 from backend.services import chat_doubt_solver
-from backend.parsers import extract_text_from_pdf
+from backend.parsers import extract_text_from_upload
 
 
 def render_chat_view(api_key: str, model_name: str):
     """Renders the interactive chat-based doubt solver."""
     st.markdown("""
     <div style="margin-bottom: 20px;">
-        <h2 style="margin: 0; display: flex; align-items: center; gap: 10px;">
+        <h2 style="margin: 0; display: flex; align-items: center; gap: 10px; font-size: 1.5rem;">
             <span>💬</span> Instant Socratic AI Tutor
         </h2>
-        <div style="color: #94a3b8; font-size: 0.95rem; margin-top: 4px;">
+        <div style="color: #94a3b8; font-size: 0.92rem; margin-top: 4px;">
             Ask clarifying questions, debug code, or attach notes for contextual doubt resolution.
         </div>
     </div>
@@ -33,16 +33,14 @@ def render_chat_view(api_key: str, model_name: str):
             key="chat_context_doc"
         )
         if chat_doc is not None:
-            if "pdf" in chat_doc.type:
-                st.session_state.chat_context_text = extract_text_from_pdf(chat_doc.getvalue())
-            else:
-                st.session_state.chat_context_text = chat_doc.getvalue().decode("utf-8", errors="ignore")
-            st.success(f"Attached context from '{chat_doc.name}' ({len(st.session_state.chat_context_text)} chars).")
+            extracted_text = extract_text_from_upload(chat_doc)
+            st.session_state.chat_context_text = extracted_text
+            st.success(f"Attached context from '{chat_doc.name}' ({len(extracted_text or '')} chars).")
 
     # Clickable Starter Prompt Chips
     st.markdown("""
-    <div style="margin-bottom: 8px;">
-        <span style="font-size: 0.8rem; color: #94a3b8;">Suggested Doubts to Explore:</span>
+    <div style="margin-bottom: 10px;">
+        <span style="font-size: 0.82rem; color: #94a3b8; font-weight: 600;">⚡ Suggested Doubts to Explore:</span>
     </div>
     """, unsafe_allow_html=True)
 
@@ -61,7 +59,7 @@ def render_chat_view(api_key: str, model_name: str):
                 selected_prompt = q_text
 
     # Top Toolbar
-    col_chat_h, col_chat_clear = st.columns([5, 1.2])
+    col_chat_h, col_chat_clear = st.columns([5, 1.3])
     with col_chat_clear:
         if st.button("🗑️ Clear Session", use_container_width=True, key="chat_clear_btn"):
             st.session_state.chat_messages = []
@@ -71,10 +69,10 @@ def render_chat_view(api_key: str, model_name: str):
     # Empty State Welcome Card
     if not st.session_state.chat_messages:
         st.markdown("""
-        <div style="background: rgba(19, 27, 46, 0.4); border: 1px dashed rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 32px 20px; text-align: center; color: #64748b; margin-bottom: 20px;">
-            <div style="font-size: 2rem; margin-bottom: 6px;">🧞</div>
-            <div style="font-weight: 600; color: #cbd5e1; font-size: 1rem;">EduGenie Socratic Tutor is Ready</div>
-            <div style="font-size: 0.85rem; margin-top: 4px;">Type your doubt, question, or code snippet in the input bar below to start your real-time learning session.</div>
+        <div style="background: rgba(18, 26, 48, 0.4); border: 1px dashed rgba(255, 255, 255, 0.12); border-radius: 14px; padding: 36px 20px; text-align: center; color: #64748b; margin-bottom: 20px;">
+            <div style="font-size: 2.2rem; margin-bottom: 6px;">🧞</div>
+            <div style="font-weight: 600; color: #cbd5e1; font-size: 1.05rem;">EduGenie Socratic Tutor is Ready</div>
+            <div style="font-size: 0.86rem; color: #94a3b8; margin-top: 4px;">Type your doubt, question, or code snippet in the input bar below to start your real-time learning session.</div>
         </div>
         """, unsafe_allow_html=True)
 

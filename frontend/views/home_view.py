@@ -13,15 +13,15 @@ def render_home_view():
     """Renders the comprehensive EduGenie Home and Exploration portal."""
     st.markdown("""
     <div style="margin-bottom: 24px;">
-        <div style="background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.9) 100%); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 28px 24px; position: relative; overflow: hidden;">
-            <div style="position: absolute; top: -30px; right: -30px; width: 140px; height: 140px; background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, transparent 70%); border-radius: 50%;"></div>
+        <div style="background: linear-gradient(135deg, rgba(22, 33, 62, 0.7) 0%, rgba(13, 19, 36, 0.9) 100%); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 26px 26px; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);">
+            <div style="position: absolute; top: -30px; right: -30px; width: 150px; height: 150px; background: radial-gradient(circle, rgba(6, 182, 212, 0.25) 0%, transparent 70%); border-radius: 50%;"></div>
             <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
                 <div>
                     <span class="badge-tag badge-cyan" style="margin-bottom: 8px;">🚀 AI Study Assistant v2.0</span>
-                    <h2 style="margin: 6px 0; font-size: 1.8rem; font-weight: 800; color: #f8fafc;">
+                    <h2 style="margin: 6px 0; font-size: 1.85rem; font-weight: 800; color: #f8fafc;">
                         Exploring EduGenie: Autonomous Academic Suite
                     </h2>
-                    <div style="color: #94a3b8; font-size: 0.95rem; max-width: 680px;">
+                    <div style="color: #94a3b8; font-size: 0.95rem; max-width: 720px; line-height: 1.6;">
                         Master difficult subjects faster with calibrated multi-level explanations, interactive 3-question MCQ drills with corrective guidance, long paragraph condensing, and personalized learning plans.
                     </div>
                 </div>
@@ -37,7 +37,7 @@ def render_home_view():
     
     with col_f1:
         st.markdown("""
-        <div class="glass-card" style="margin-bottom: 16px; min-height: 180px;">
+        <div class="glass-card" style="margin-bottom: 14px; min-height: 180px;">
             <div class="glass-card-header">
                 <span class="badge-tag badge-cyan">a. Asking Questions</span>
                 <span style="font-weight: 700; color: #f8fafc; font-size: 1.05rem;">💬 Instant Socratic Tutor</span>
@@ -54,7 +54,7 @@ def render_home_view():
         st.markdown("<div style='margin-top: 14px;'></div>", unsafe_allow_html=True)
 
         st.markdown("""
-        <div class="glass-card" style="margin-bottom: 16px; min-height: 180px;">
+        <div class="glass-card" style="margin-bottom: 14px; min-height: 180px;">
             <div class="glass-card-header">
                 <span class="badge-tag badge-purple">b. Topic Explanations</span>
                 <span style="font-weight: 700; color: #f8fafc; font-size: 1.05rem;">🎓 Adaptive Concept Explainer</span>
@@ -70,7 +70,7 @@ def render_home_view():
 
     with col_f2:
         st.markdown("""
-        <div class="glass-card" style="margin-bottom: 16px; min-height: 180px;">
+        <div class="glass-card" style="margin-bottom: 14px; min-height: 180px;">
             <div class="glass-card-header">
                 <span class="badge-tag badge-green">c. Summarising Content</span>
                 <span style="font-weight: 700; color: #f8fafc; font-size: 1.05rem;">📝 Notes Summarizer & Cheat-Sheet</span>
@@ -87,7 +87,7 @@ def render_home_view():
         st.markdown("<div style='margin-top: 14px;'></div>", unsafe_allow_html=True)
 
         st.markdown("""
-        <div class="glass-card" style="margin-bottom: 16px; min-height: 180px;">
+        <div class="glass-card" style="margin-bottom: 14px; min-height: 180px;">
             <div class="glass-card-header">
                 <span class="badge-tag badge-amber">d. Generating Quizzes</span>
                 <span style="font-weight: 700; color: #f8fafc; font-size: 1.05rem;">❓ Smart 3-MCQ Engine & Flashcards</span>
@@ -104,12 +104,12 @@ def render_home_view():
     # 2. Personalized Learning Plan Highlight Card
     st.markdown("<div style='margin-top: 24px;'></div>", unsafe_allow_html=True)
     st.markdown("""
-    <div style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(168, 85, 247, 0.12) 100%); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 14px; padding: 20px; margin-bottom: 20px;">
+    <div style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(168, 85, 247, 0.15) 100%); border: 1px solid rgba(168, 85, 247, 0.35); border-radius: 14px; padding: 22px; margin-bottom: 18px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
             <div>
                 <span class="badge-tag badge-purple">e. Personalized Roadmaps</span>
-                <h4 style="margin: 6px 0 2px 0; color: #f8fafc; font-size: 1.15rem;">🗺️ Get a Personalized Learning Plan</h4>
-                <div style="color: #94a3b8; font-size: 0.88rem;">
+                <h4 style="margin: 6px 0 2px 0; color: #f8fafc; font-size: 1.2rem;">🗺️ Get a Personalized Learning Plan</h4>
+                <div style="color: #94a3b8; font-size: 0.9rem; line-height: 1.5;">
                     Input your target skill, timeframe, and daily hours to receive a week-by-week roadmap with curated textbooks, courses, and practice drills.
                 </div>
             </div>
@@ -125,33 +125,33 @@ def render_home_view():
     st.markdown("### 📐 Fig. EDUGENIE: AI Study Assistant Architecture")
     
     st.markdown("""
-    <div style="background: #090d16; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 22px; margin-bottom: 20px;">
-        <div style="text-align: center; color: #38bdf8; font-weight: 700; font-size: 0.95rem; margin-bottom: 12px; letter-spacing: 0.5px;">
+    <div style="background: #090e1c; border: 1px solid rgba(255, 255, 255, 0.09); border-radius: 14px; padding: 24px; margin-bottom: 20px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);">
+        <div style="text-align: center; color: #38bdf8; font-weight: 700; font-size: 0.95rem; margin-bottom: 16px; letter-spacing: 0.5px;">
             FIG. EDUGENIE: END-TO-END MULTIMODAL INTELLIGENCE PIPELINE
         </div>
         <div style="display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 12px; text-align: center;">
-            <div style="background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 10px; padding: 14px; flex: 1; min-width: 140px;">
-                <div style="font-size: 1.5rem;">📥</div>
-                <div style="font-weight: 700; color: #f1f5f9; font-size: 0.85rem; margin-top: 4px;">User Inputs</div>
-                <div style="font-size: 0.72rem; color: #94a3b8;">Topic • Text • PDF • Notes</div>
+            <div style="background: rgba(22, 33, 62, 0.7); border: 1px solid rgba(56, 189, 248, 0.35); border-radius: 12px; padding: 16px; flex: 1; min-width: 140px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);">
+                <div style="font-size: 1.6rem;">📥</div>
+                <div style="font-weight: 700; color: #f1f5f9; font-size: 0.88rem; margin-top: 4px;">User Inputs</div>
+                <div style="font-size: 0.74rem; color: #94a3b8;">Topic • Text • PDF • Notes</div>
             </div>
-            <div style="color: #38bdf8; font-size: 1.3rem; font-weight: 700;">➔</div>
-            <div style="background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 10px; padding: 14px; flex: 1; min-width: 140px;">
-                <div style="font-size: 1.5rem;">🧠</div>
-                <div style="font-weight: 700; color: #f1f5f9; font-size: 0.85rem; margin-top: 4px;">Gemini LLM Engine</div>
-                <div style="font-size: 0.72rem; color: #94a3b8;">gemini-3.8-flash & Socratic Prompts</div>
+            <div style="color: #38bdf8; font-size: 1.4rem; font-weight: 700;">➔</div>
+            <div style="background: rgba(22, 33, 62, 0.7); border: 1px solid rgba(168, 85, 247, 0.35); border-radius: 12px; padding: 16px; flex: 1; min-width: 140px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);">
+                <div style="font-size: 1.6rem;">🧠</div>
+                <div style="font-weight: 700; color: #f1f5f9; font-size: 0.88rem; margin-top: 4px;">Gemini LLM Engine</div>
+                <div style="font-size: 0.74rem; color: #94a3b8;">gemini-1.5-flash & Prompts</div>
             </div>
-            <div style="color: #38bdf8; font-size: 1.3rem; font-weight: 700;">➔</div>
-            <div style="background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(52, 211, 153, 0.3); border-radius: 10px; padding: 14px; flex: 1; min-width: 140px;">
-                <div style="font-size: 1.5rem;">⚡</div>
-                <div style="font-weight: 700; color: #f1f5f9; font-size: 0.85rem; margin-top: 4px;">Structured Parsers</div>
-                <div style="font-size: 0.72rem; color: #94a3b8;">JSON • Markdown • gTTS Audio</div>
+            <div style="color: #38bdf8; font-size: 1.4rem; font-weight: 700;">➔</div>
+            <div style="background: rgba(22, 33, 62, 0.7); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 12px; padding: 16px; flex: 1; min-width: 140px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);">
+                <div style="font-size: 1.6rem;">⚡</div>
+                <div style="font-weight: 700; color: #f1f5f9; font-size: 0.88rem; margin-top: 4px;">Structured Parsers</div>
+                <div style="font-size: 0.74rem; color: #94a3b8;">JSON • Markdown • gTTS Audio</div>
             </div>
-            <div style="color: #38bdf8; font-size: 1.3rem; font-weight: 700;">➔</div>
-            <div style="background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(251, 191, 36, 0.3); border-radius: 10px; padding: 14px; flex: 1; min-width: 140px;">
-                <div style="font-size: 1.5rem;">📊</div>
-                <div style="font-weight: 700; color: #f1f5f9; font-size: 0.85rem; margin-top: 4px;">Smart Outputs</div>
-                <div style="font-size: 0.72rem; color: #94a3b8;">3-MCQ Drill • Cheat-Sheet • Plan</div>
+            <div style="color: #38bdf8; font-size: 1.4rem; font-weight: 700;">➔</div>
+            <div style="background: rgba(22, 33, 62, 0.7); border: 1px solid rgba(245, 158, 11, 0.35); border-radius: 12px; padding: 16px; flex: 1; min-width: 140px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);">
+                <div style="font-size: 1.6rem;">📊</div>
+                <div style="font-weight: 700; color: #f1f5f9; font-size: 0.88rem; margin-top: 4px;">Smart Outputs</div>
+                <div style="font-size: 0.74rem; color: #94a3b8;">3-MCQ Drill • Cheat-Sheet • Plan</div>
             </div>
         </div>
     </div>

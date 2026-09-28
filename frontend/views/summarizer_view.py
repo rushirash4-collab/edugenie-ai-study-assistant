@@ -6,7 +6,7 @@ glossaries, structured deep notes, and exam cheat-sheets with audio recaps.
 
 import streamlit as st
 from backend.services import generate_summary, generate_tts_audio
-from backend.parsers import extract_text_from_pdf, extract_delimited_section
+from backend.parsers import extract_text_from_upload, extract_delimited_section
 from frontend.components import render_export_buttons
 
 
@@ -14,10 +14,10 @@ def render_summarizer_view(api_key: str, model_name: str):
     """Renders the study notes summarizer and cheat-sheet module."""
     st.markdown("""
     <div style="margin-bottom: 20px;">
-        <h2 style="margin: 0; display: flex; align-items: center; gap: 10px;">
+        <h2 style="margin: 0; display: flex; align-items: center; gap: 10px; font-size: 1.5rem;">
             <span>📝</span> Notes Summarizer & Exam Cheat-Sheet
         </h2>
-        <div style="color: #94a3b8; font-size: 0.95rem; margin-top: 4px;">
+        <div style="color: #94a3b8; font-size: 0.92rem; margin-top: 4px;">
             Upload your lecture notes, textbook chapters, or paste study materials to generate structured cheat-sheets and audio recaps.
         </div>
     </div>
@@ -31,7 +31,7 @@ def render_summarizer_view(api_key: str, model_name: str):
 
     with col_input:
         with st.container(border=True):
-            st.markdown("##### 📥 Study Material Input")
+            st.markdown("<div style='font-weight: 700; font-size: 0.95rem; color: #f8fafc; margin-bottom: 10px;'>📥 Study Material Input</div>", unsafe_allow_html=True)
 
             uploaded_doc = st.file_uploader(
                 "📎 Upload document to summarize (.pdf, .txt):",
@@ -49,16 +49,13 @@ def render_summarizer_view(api_key: str, model_name: str):
             # Determine Active Text Content
             active_text = ""
             if uploaded_doc is not None:
-                if "pdf" in uploaded_doc.type:
-                    active_text = extract_text_from_pdf(uploaded_doc.getvalue())
-                else:
-                    active_text = uploaded_doc.getvalue().decode("utf-8", errors="ignore")
+                active_text = extract_text_from_upload(uploaded_doc) or ""
             elif notes_text.strip():
                 active_text = notes_text.strip()
 
             word_count = len(active_text.split()) if active_text.strip() else 0
             char_count = len(active_text)
-            st.markdown(f'<div style="margin-bottom: 12px;"><span class="stat-pill">📊 {word_count} words | {char_count} chars</span></div>', unsafe_allow_html=True)
+            st.markdown(f'<div style="margin-bottom: 12px;"><span class="badge-tag badge-cyan">📊 {word_count} words | {char_count} chars</span></div>', unsafe_allow_html=True)
 
             summary_depth = st.radio(
                 "Summary Detail Level:",
@@ -131,9 +128,9 @@ def render_summarizer_view(api_key: str, model_name: str):
         else:
             # Empty state placeholder
             st.markdown("""
-            <div style="background: rgba(18, 24, 38, 0.4); border: 1px dashed rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 42px 20px; text-align: center; color: #64748b;">
-                <div style="font-size: 2.2rem; margin-bottom: 8px;">📑</div>
-                <div style="font-size: 1rem; font-weight: 600; color: #94a3b8; margin-bottom: 4px;">Summarizer Workspace Ready</div>
-                <div style="font-size: 0.84rem;">Upload your study document (.pdf, .txt) or paste lecture text on the left and click <b>Condense & Extract Cheat-Sheet</b>.</div>
+            <div style="background: rgba(18, 26, 48, 0.4); border: 1px dashed rgba(255, 255, 255, 0.12); border-radius: 14px; padding: 46px 20px; text-align: center; color: #64748b;">
+                <div style="font-size: 2.4rem; margin-bottom: 8px;">📑</div>
+                <div style="font-size: 1.05rem; font-weight: 600; color: #94a3b8; margin-bottom: 4px;">Summarizer Workspace Ready</div>
+                <div style="font-size: 0.86rem; color: #64748b;">Upload your study document (.pdf, .txt) or paste lecture text on the left and click <b>Condense & Extract Cheat-Sheet</b>.</div>
             </div>
             """, unsafe_allow_html=True)

@@ -11,12 +11,12 @@ from backend.auth import authenticate_user, register_user
 def render_auth_view():
     """Renders clean dedicated Login and Registration pages."""
     st.markdown("""
-    <div style="text-align: center; margin-top: 15px; margin-bottom: 25px;">
-        <div style="font-size: 3rem; margin-bottom: 6px;">🎓</div>
-        <h1 style="font-size: 2.2rem; font-weight: 800; background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #f472b6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 4px;">
+    <div style="text-align: center; margin-top: 20px; margin-bottom: 28px;">
+        <div style="font-size: 3.2rem; margin-bottom: 8px; filter: drop-shadow(0 4px 12px rgba(99, 102, 241, 0.4));">🎓</div>
+        <h1 style="font-size: 2.3rem; font-weight: 800; background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 6px;">
             EduGenie AI Study Suite
         </h1>
-        <div style="color: #94a3b8; font-size: 0.95rem; max-width: 520px; margin: 0 auto;">
+        <div style="color: #94a3b8; font-size: 0.96rem; max-width: 540px; margin: 0 auto; line-height: 1.6;">
             Empowering students with adaptive concept explanations, 3-MCQ practice drills, high-yield summarization, and personalized learning roadmaps.
         </div>
     </div>
@@ -25,7 +25,7 @@ def render_auth_view():
     if "auth_mode" not in st.session_state:
         st.session_state.auth_mode = "login"
 
-    col_center1, col_center2, col_center3 = st.columns([1, 1.6, 1])
+    col_center1, col_center2, col_center3 = st.columns([1, 1.7, 1])
 
     with col_center2:
         # Toggle Segmented Buttons between Login and Sign Up
@@ -39,7 +39,7 @@ def render_auth_view():
                 st.session_state.auth_mode = "register"
                 st.rerun()
 
-        st.markdown("<div style='margin-top: 12px;'></div>", unsafe_allow_html=True)
+        st.markdown("<div style='margin-top: 14px;'></div>", unsafe_allow_html=True)
 
         # 1. Dedicated Login View
         if st.session_state.auth_mode == "login":
@@ -47,7 +47,7 @@ def render_auth_view():
                 st.markdown("<h3 style='margin: 0 0 6px 0; color: #f8fafc; font-size: 1.3rem;'>Student Sign In</h3>", unsafe_allow_html=True)
                 st.markdown("<div style='color: #94a3b8; font-size: 0.86rem; margin-bottom: 16px;'>Enter your registered email and password to access your study portal.</div>", unsafe_allow_html=True)
                 
-                login_email = st.text_input("Email Address", placeholder="e.g., student@university.edu", key="auth_login_email")
+                login_email = st.text_input("Email Address", placeholder="e.g., student@edugenie.ai", key="auth_login_email")
                 login_pwd = st.text_input("Password", type="password", placeholder="Enter your password", key="auth_login_pwd")
 
                 st.markdown("<div style='margin-top: 10px;'></div>", unsafe_allow_html=True)
@@ -62,7 +62,7 @@ def render_auth_view():
 
                 st.markdown("""
                 <div style="margin-top: 18px; text-align: center; color: #94a3b8; font-size: 0.86rem;">
-                    Don't have an account yet? Click <b>Sign Up (Register)</b> above to create one in seconds.
+                    Don't have an account yet? Click <b>Sign Up (Register)</b> above to create one.
                 </div>
                 """, unsafe_allow_html=True)
 

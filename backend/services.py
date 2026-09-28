@@ -13,7 +13,7 @@ from backend.parsers import clean_json_output, extract_text_from_pdf, process_im
 
 def generate_explanation(
     api_key: str,
-    model_name: str = "gemini-3.8-flash",
+    model_name: str = "gemini-1.5-flash",
     topic: str = "",
     audience_level: str = "Beginner / High School",
     output_style: str = "Balanced & Structured",
@@ -22,9 +22,9 @@ def generate_explanation(
 ) -> Dict[str, Any]:
     """Generates structured concept explanation with optional multimodal document/diagram intake."""
     try:
-        model = get_gemini_model(api_key, model_name or "gemini-3.8-flash", temperature=0.6)
+        model = get_gemini_model(api_key, model_name or "gemini-1.5-flash", temperature=0.6)
         if not model:
-            return {"success": False, "error": "Model initialization failed."}
+            return {"success": False, "error": "Model initialization failed. Please check your API key."}
 
         prompt_text = f"""
         You are an elite academic tutor and master explainer. Provide a deeply intuitive and comprehensive explanation.
@@ -73,7 +73,7 @@ def generate_explanation(
 
 def generate_quiz(
     api_key: str,
-    model_name: str = "gemini-3.8-flash",
+    model_name: str = "gemini-1.5-flash",
     topic: str = "",
     num_questions: int = 3,
     difficulty: str = "Medium",
@@ -81,9 +81,9 @@ def generate_quiz(
 ) -> Dict[str, Any]:
     """Generates dynamic multiple-choice questions with 4 options each, stepwise guidance, and learning resources."""
     try:
-        model = get_gemini_model(api_key, model_name or "gemini-3.8-flash", temperature=0.3)
+        model = get_gemini_model(api_key, model_name or "gemini-1.5-flash", temperature=0.3)
         if not model:
-            return {"success": False, "error": "Model initialization failed."}
+            return {"success": False, "error": "Model initialization failed. Please check your API key."}
 
         context_clause = ""
         if text_context and text_context.strip():
@@ -118,16 +118,16 @@ def generate_quiz(
 
 def generate_flashcards(
     api_key: str,
-    model_name: str = "gemini-3.8-flash",
+    model_name: str = "gemini-1.5-flash",
     topic: str = "",
     count: int = 5,
     text_context: Optional[str] = None
 ) -> Dict[str, Any]:
     """Generates active-recall study flashcards from topic or uploaded document context."""
     try:
-        model = get_gemini_model(api_key, model_name or "gemini-3.8-flash", temperature=0.4)
+        model = get_gemini_model(api_key, model_name or "gemini-1.5-flash", temperature=0.4)
         if not model:
-            return {"success": False, "error": "Model initialization failed."}
+            return {"success": False, "error": "Model initialization failed. Please check your API key."}
 
         context_clause = ""
         if text_context and text_context.strip():
@@ -151,15 +151,15 @@ def generate_flashcards(
 
 def generate_summary(
     api_key: str,
-    model_name: str = "gemini-3.8-flash",
+    model_name: str = "gemini-1.5-flash",
     text_content: str = "",
     summary_depth: str = "In-Depth Structured Notes"
 ) -> Dict[str, Any]:
     """Summarizes study notes and extracts cheat-sheets."""
     try:
-        model = get_gemini_model(api_key, model_name or "gemini-3.8-flash", temperature=0.3)
+        model = get_gemini_model(api_key, model_name or "gemini-1.5-flash", temperature=0.3)
         if not model:
-            return {"success": False, "error": "Model initialization failed."}
+            return {"success": False, "error": "Model initialization failed. Please check your API key."}
 
         prompt = f"""
         You are an expert academic summarizer. Process the provided study notes at detail level: '{summary_depth}'.
@@ -188,16 +188,16 @@ def generate_summary(
 
 def chat_doubt_solver(
     api_key: str,
-    model_name: str = "gemini-3.8-flash",
+    model_name: str = "gemini-1.5-flash",
     conversation_history: List[Dict[str, Any]] = None,
     user_query: str = "",
     context_text: Optional[str] = None
 ) -> Dict[str, Any]:
     """Processes interactive Socratic doubt clarification with conversational history and optional context."""
     try:
-        model = get_gemini_model(api_key, model_name or "gemini-3.8-flash", temperature=0.5)
+        model = get_gemini_model(api_key, model_name or "gemini-1.5-flash", temperature=0.5)
         if not model:
-            return {"success": False, "error": "Model initialization failed."}
+            return {"success": False, "error": "Model initialization failed. Please check your API key."}
 
         gemini_history = []
         for msg in (conversation_history or []):
@@ -222,7 +222,7 @@ def chat_doubt_solver(
 
 def generate_learning_plan(
     api_key: str,
-    model_name: str = "gemini-3.8-flash",
+    model_name: str = "gemini-1.5-flash",
     goal: str = "",
     current_level: str = "Beginner",
     timeframe_weeks: int = 4,
@@ -231,9 +231,9 @@ def generate_learning_plan(
 ) -> Dict[str, Any]:
     """Generates a personalized step-by-step learning plan with curated resource recommendations."""
     try:
-        model = get_gemini_model(api_key, model_name or "gemini-3.8-flash", temperature=0.4)
+        model = get_gemini_model(api_key, model_name or "gemini-1.5-flash", temperature=0.4)
         if not model:
-            return {"success": False, "error": "Model initialization failed."}
+            return {"success": False, "error": "Model initialization failed. Please check your API key."}
 
         context_clause = ""
         if uploaded_context and uploaded_context.strip():
@@ -272,7 +272,10 @@ def generate_learning_plan(
 
 def generate_tts_audio(text_content: str) -> io.BytesIO:
     """Generates MP3 audio stream using gTTS for auditory revision."""
-    cleaned = re.sub(r"[#*_`>\-\[\]\(\)]", " ", text_content)
+    # Clean up markdown, section tags, formulas and links for clear voice synthesis
+    cleaned = re.sub(r"\[SECTION:[^\]]*\]", " ", text_content, flags=re.IGNORECASE)
+    cleaned = re.sub(r"https?://\S+", " ", cleaned)
+    cleaned = re.sub(r"[`#*_\->~\[\]\(\)\{\}\$\|\\]", " ", cleaned)
     cleaned = re.sub(r"\s+", " ", cleaned).strip()[:2000]
     
     fp = io.BytesIO()

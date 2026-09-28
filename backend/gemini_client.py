@@ -3,7 +3,11 @@ Google Gemini client configuration, model creation, and error interception.
 """
 
 import os
+import warnings
 import streamlit as st
+
+# Suppress library deprecation warnings for clean runtime logs
+warnings.filterwarnings("ignore", category=FutureWarning)
 import google.generativeai as genai
 from typing import Optional
 
@@ -13,7 +17,7 @@ def resolve_api_key(user_input_key: str = "") -> str:
     Resolves the Gemini API key through the defined hierarchy:
     1. Streamlit Secrets (st.secrets["GEMINI_API_KEY"])
     2. Environment Variable (os.getenv("GEMINI_API_KEY"))
-    3. User Input from the UI widget
+    3. User Input from UI / session state
     """
     if user_input_key and user_input_key.strip():
         return user_input_key.strip()
@@ -33,7 +37,11 @@ def resolve_api_key(user_input_key: str = "") -> str:
     return ""
 
 
-def get_gemini_model(api_key: str, model_name: str = "gemini-3.8-flash", temperature: float = 0.7) -> Optional[genai.GenerativeModel]:
+def get_gemini_model(
+    api_key: str,
+    model_name: str = "gemini-1.5-flash",
+    temperature: float = 0.7
+) -> Optional[genai.GenerativeModel]:
     """Configures and returns a Gemini GenerativeModel instance with fallback handling."""
     if not api_key:
         return None
@@ -46,17 +54,27 @@ def get_gemini_model(api_key: str, model_name: str = "gemini-3.8-flash", tempera
             "max_output_tokens": 4096,
         }
         
-        # Primary candidate models in preference order
-        candidate_models = [model_name, "gemini-3.8-flash", "gemini-3.7-flash", "gemini-3.5-flash", "gemini-flash-latest"]
+        # Valid production Google Gemini model candidates in order of preference
+        candidate_models = [
+            model_name,
+            "gemini-1.5-flash",
+            "gemini-2.0-flash",
+            "gemini-1.5-pro",
+            "gemini-flash-latest"
+        ]
         
-        for candidate in candidate_models:
+        # Deduplicate candidates while preserving order
+        seen = set()
+        deduped_candidates = [m for m in candidate_models if m and not (m in seen or seen.add(m))]
+        
+        for candidate in deduped_candidates:
             try:
                 model = genai.GenerativeModel(model_name=candidate, generation_config=generation_config)
                 return model
             except Exception:
                 continue
                 
-        return genai.GenerativeModel(model_name="gemini-3.8-flash", generation_config=generation_config)
+        return genai.GenerativeModel(model_name="gemini-1.5-flash", generation_config=generation_config)
     except Exception as e:
         st.error(f"⚠️ Error configuring Gemini model: {str(e)}")
         return None

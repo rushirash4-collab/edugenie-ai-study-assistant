@@ -6,7 +6,7 @@ curated resource directories, and stepwise milestone tracking.
 
 import streamlit as st
 from backend.services import generate_learning_plan, generate_tts_audio
-from backend.parsers import extract_delimited_section, extract_text_from_pdf
+from backend.parsers import extract_delimited_section, extract_text_from_upload
 from frontend.components import render_export_buttons
 
 
@@ -14,10 +14,10 @@ def render_learning_plan_view(api_key: str, model_name: str):
     """Renders the personalized learning plan generator."""
     st.markdown("""
     <div style="margin-bottom: 20px;">
-        <h2 style="margin: 0; display: flex; align-items: center; gap: 10px;">
+        <h2 style="margin: 0; display: flex; align-items: center; gap: 10px; font-size: 1.5rem;">
             <span>🗺️</span> Personalized Learning Plan & Roadmap
         </h2>
-        <div style="color: #94a3b8; font-size: 0.95rem; margin-top: 4px;">
+        <div style="color: #94a3b8; font-size: 0.92rem; margin-top: 4px;">
             Set your target skill or exam goal, define your timeframe, and receive a customized week-by-week curriculum with curated learning resources and step-by-step guidance.
         </div>
     </div>
@@ -26,7 +26,7 @@ def render_learning_plan_view(api_key: str, model_name: str):
     # Preset Goal Suggestions
     st.markdown("""
     <div style="margin-bottom: 12px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-        <span style="font-size: 0.8rem; color: #94a3b8;">Popular Roadmap Goals:</span>
+        <span style="font-size: 0.82rem; color: #94a3b8; font-weight: 600;">⚡ Popular Roadmap Goals:</span>
     </div>
     """, unsafe_allow_html=True)
 
@@ -47,7 +47,7 @@ def render_learning_plan_view(api_key: str, model_name: str):
 
     with col_input:
         with st.container(border=True):
-            st.markdown("##### ⚙️ Learning Plan Parameters")
+            st.markdown("<div style='font-weight: 700; font-size: 0.95rem; color: #f8fafc; margin-bottom: 10px;'>⚙️ Learning Plan Parameters</div>", unsafe_allow_html=True)
 
             goal = st.text_input(
                 "Learning Goal / Target Subject:",
@@ -83,17 +83,13 @@ def render_learning_plan_view(api_key: str, model_name: str):
             generate_plan_btn = st.button("🚀 Generate My Personalized Plan", type="primary", use_container_width=True, key="plan_submit_btn")
 
         if generate_plan_btn:
+            active_goal = goal.strip() or st.session_state.get("plan_goal_input", "").strip()
             if not api_key:
                 st.error("🔑 Please enter a valid Gemini API Key in the sidebar or `.env` file.")
-            elif not goal.strip() and not uploaded_syllabus:
+            elif not active_goal and not uploaded_syllabus:
                 st.warning("Please specify your learning goal or attach a syllabus outline.")
             else:
-                syllabus_text = None
-                if uploaded_syllabus is not None:
-                    if "pdf" in uploaded_syllabus.type:
-                        syllabus_text = extract_text_from_pdf(uploaded_syllabus.getvalue())
-                    else:
-                        syllabus_text = uploaded_syllabus.getvalue().decode("utf-8", errors="ignore")
+                syllabus_text = extract_text_from_upload(uploaded_syllabus)
 
                 weeks_map = {
                     "2 Weeks (Sprint)": 2,
@@ -107,7 +103,7 @@ def render_learning_plan_view(api_key: str, model_name: str):
                     result = generate_learning_plan(
                         api_key=api_key,
                         model_name=model_name,
-                        goal=goal if goal.strip() else uploaded_syllabus.name,
+                        goal=active_goal if active_goal else (uploaded_syllabus.name if uploaded_syllabus else "Target Curriculum"),
                         current_level=level,
                         timeframe_weeks=weeks_num,
                         daily_hours=daily_hours,
@@ -116,7 +112,7 @@ def render_learning_plan_view(api_key: str, model_name: str):
 
                     if result["success"]:
                         st.session_state.learning_plan_output = {
-                            "goal": goal if goal.strip() else "Syllabus Study Plan",
+                            "goal": active_goal if active_goal else (uploaded_syllabus.name if uploaded_syllabus else "Syllabus Study Plan"),
                             "content": result["content"],
                             "level": level,
                             "timeframe": timeframe,
@@ -138,7 +134,7 @@ def render_learning_plan_view(api_key: str, model_name: str):
             raw_plan = plan_data["content"]
 
             st.markdown(f"""
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
                 <div style="display: flex; gap: 6px; align-items: center;">
                     <span class="badge-tag badge-purple">🎯 Goal: {plan_data['goal']}</span>
                     <span class="badge-tag badge-blue">{plan_data['level']}</span>
@@ -170,9 +166,9 @@ def render_learning_plan_view(api_key: str, model_name: str):
             render_export_buttons(f"{plan_data['goal']}_learning_plan", raw_plan, key_prefix="plan_export")
         else:
             st.markdown("""
-            <div style="background: rgba(18, 24, 38, 0.4); border: 1px dashed rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 42px 20px; text-align: center; color: #64748b;">
-                <div style="font-size: 2.2rem; margin-bottom: 8px;">🗺️</div>
-                <div style="font-size: 1rem; font-weight: 600; color: #94a3b8; margin-bottom: 4px;">Learning Plan Generator Ready</div>
-                <div style="font-size: 0.84rem;">Enter your target goal or attach a syllabus on the left and click <b>Generate My Personalized Plan</b>.</div>
+            <div style="background: rgba(18, 26, 48, 0.4); border: 1px dashed rgba(255, 255, 255, 0.12); border-radius: 14px; padding: 46px 20px; text-align: center; color: #64748b;">
+                <div style="font-size: 2.4rem; margin-bottom: 8px;">🗺️</div>
+                <div style="font-size: 1.05rem; font-weight: 600; color: #94a3b8; margin-bottom: 4px;">Learning Plan Generator Ready</div>
+                <div style="font-size: 0.86rem; color: #64748b;">Enter your target goal or attach a syllabus on the left and click <b>Generate My Personalized Plan</b>.</div>
             </div>
             """, unsafe_allow_html=True)

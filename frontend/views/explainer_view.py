@@ -14,11 +14,11 @@ from frontend.components import render_export_buttons
 def render_explainer_view(api_key: str, model_name: str):
     """Renders the concept explainer module with clean SaaS layout."""
     st.markdown("""
-    <div style="margin-bottom: 18px;">
-        <h2 style="margin: 0; display: flex; align-items: center; gap: 8px; font-size: 1.4rem;">
+    <div style="margin-bottom: 20px;">
+        <h2 style="margin: 0; display: flex; align-items: center; gap: 10px; font-size: 1.5rem;">
             <span>🎓</span> Adaptive Concept Explainer
         </h2>
-        <div style="color: #94a3b8; font-size: 0.88rem; margin-top: 2px;">
+        <div style="color: #94a3b8; font-size: 0.92rem; margin-top: 4px;">
             Deconstruct difficult STEM and humanities topics with calibrated depth, real-world analogies, and audio playback.
         </div>
     </div>
@@ -26,8 +26,8 @@ def render_explainer_view(api_key: str, model_name: str):
 
     # Preset Sample Topic Chips
     st.markdown("""
-    <div style="margin-bottom: 14px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-        <span style="font-size: 0.8rem; color: #94a3b8;">Quick Sample Topics:</span>
+    <div style="margin-bottom: 12px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+        <span style="font-size: 0.82rem; color: #94a3b8; font-weight: 600;">⚡ Quick Sample Topics:</span>
     </div>
     """, unsafe_allow_html=True)
 
@@ -52,8 +52,9 @@ def render_explainer_view(api_key: str, model_name: str):
 
             topic = st.text_input(
                 "Concept / Topic Name",
+                value=st.session_state.get("concept_topic_input", ""),
                 placeholder="e.g., Backpropagation, Photosynthesis, Bayes Theorem",
-                key="concept_topic_input"
+                key="concept_topic_input_field"
             )
 
             col_sub1, col_sub2 = st.columns(2)
@@ -91,9 +92,10 @@ def render_explainer_view(api_key: str, model_name: str):
             generate_btn = st.button("🚀 Explain Concept", type="primary", use_container_width=True, key="explainer_submit_btn")
 
         if generate_btn:
+            active_topic = topic.strip() or st.session_state.get("concept_topic_input", "").strip()
             if not api_key:
                 st.error("🔑 Please provide a valid Gemini API Key in the sidebar or `.env` file.")
-            elif not topic.strip() and not uploaded_file:
+            elif not active_topic and not uploaded_file:
                 st.warning("Please enter a concept name or upload a document/diagram.")
             else:
                 start_time = time.time()
@@ -104,7 +106,7 @@ def render_explainer_view(api_key: str, model_name: str):
                     result = generate_explanation(
                         api_key=api_key,
                         model_name=model_name,
-                        topic=topic,
+                        topic=active_topic,
                         audience_level=audience_level,
                         output_style=output_style,
                         uploaded_file_bytes=file_bytes,
@@ -114,7 +116,7 @@ def render_explainer_view(api_key: str, model_name: str):
                     if result["success"]:
                         elapsed = round(time.time() - start_time, 2)
                         st.session_state.explainer_output = {
-                            "topic": topic if topic else "Uploaded Document Analysis",
+                            "topic": active_topic if active_topic else (uploaded_file.name if uploaded_file else "Concept Analysis"),
                             "content": result["content"],
                             "time": elapsed,
                             "level": audience_level
@@ -136,7 +138,7 @@ def render_explainer_view(api_key: str, model_name: str):
 
             # Output Header Toolbar
             st.markdown(f"""
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
                 <div style="display: flex; gap: 6px; align-items: center;">
                     <span class="badge-tag badge-purple">Topic: {exp_data['topic']}</span>
                     <span class="badge-tag badge-blue">{exp_data['level']}</span>
@@ -186,9 +188,9 @@ def render_explainer_view(api_key: str, model_name: str):
         else:
             # Empty state with interactive prompt
             st.markdown("""
-            <div style="background: rgba(18, 24, 38, 0.4); border: 1px dashed rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 42px 20px; text-align: center; color: #64748b;">
-                <div style="font-size: 2.2rem; margin-bottom: 8px;">📖</div>
-                <div style="font-size: 1rem; font-weight: 600; color: #94a3b8; margin-bottom: 4px;">Explanation Workspace Ready</div>
-                <div style="font-size: 0.84rem;">Select a quick sample topic above or type your own concept on the left and click <b>Explain Concept</b>.</div>
+            <div style="background: rgba(18, 26, 48, 0.4); border: 1px dashed rgba(255, 255, 255, 0.12); border-radius: 14px; padding: 46px 20px; text-align: center; color: #64748b;">
+                <div style="font-size: 2.4rem; margin-bottom: 8px;">📖</div>
+                <div style="font-size: 1.05rem; font-weight: 600; color: #94a3b8; margin-bottom: 4px;">Explanation Workspace Ready</div>
+                <div style="font-size: 0.86rem; color: #64748b;">Select a quick sample topic above or type your own concept on the left and click <b>Explain Concept</b>.</div>
             </div>
             """, unsafe_allow_html=True)

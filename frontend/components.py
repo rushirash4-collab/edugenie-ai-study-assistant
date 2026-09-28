@@ -5,6 +5,7 @@ Featuring an interactive, functional sidebar equipped with:
 - User Profile & Session Logout
 - One-Click Quick Launchers
 - Live Study Session Activity Metrics
+- Polished Export & Download Hub
 """
 
 from typing import Tuple
@@ -14,20 +15,20 @@ from backend.parsers import generate_export_document
 
 
 def render_hero_banner():
-    """Renders the refined subtle glass hero header."""
+    """Renders the flagship subtle glass hero header."""
     st.markdown("""
     <div class="hero-banner">
         <div class="hero-top-row">
             <h1 class="hero-title">
                 <span>🎓 EduGenie</span>
-                <span style="font-size: 0.72rem; color: #38bdf8; font-weight: 600; padding: 2px 8px; background: rgba(56, 189, 248, 0.12); border-radius: 12px; border: 1px solid rgba(56, 189, 248, 0.3);">Pro AI Study Suite</span>
+                <span style="font-size: 0.74rem; color: #38bdf8; font-weight: 600; padding: 3px 10px; background: rgba(56, 189, 248, 0.12); border-radius: 20px; border: 1px solid rgba(56, 189, 248, 0.35);">Autonomous Academic Assistant</span>
             </h1>
-            <div class="pill-container" style="margin-top: 0;">
+            <div class="pill-container">
                 <span class="feature-pill">💬 Socratic Doubts</span>
                 <span class="feature-pill">🎓 Deep Explanations</span>
-                <span class="feature-pill">❓ 3-MCQ Quiz Engine</span>
-                <span class="feature-pill">📝 Exam Cheat-Sheets</span>
-                <span class="feature-pill">🗺️ Learning Plans</span>
+                <span class="feature-pill">❓ 3-MCQ Engine</span>
+                <span class="feature-pill">📝 Exam Digests</span>
+                <span class="feature-pill">🗺️ Roadmaps</span>
             </div>
         </div>
         <div class="hero-subtitle">
@@ -42,12 +43,12 @@ def render_sidebar() -> Tuple[str, str, str]:
     Renders a fully interactive, functional sidebar:
     1. App Identity & Authenticated User Card
     2. Primary Study Tool Navigation
-    3. Quick Subject Launchers
+    3. Quick Subject Presets
     4. Live Study Progress & Session Metrics
     5. Action toolbar (Reset Session, Sign Out)
     """
     api_key = resolve_api_key()
-    model_name = "gemini-3.8-flash"
+    model_name = "gemini-1.5-flash"
 
     # Initialize study session counters
     if "concepts_explored" not in st.session_state:
@@ -83,7 +84,6 @@ def render_sidebar() -> Tuple[str, str, str]:
                 "🗺️ Learning Plan"
             ]
 
-            # Ensure sidebar_module_nav in state
             if "sidebar_module_nav" not in st.session_state or st.session_state.sidebar_module_nav not in nav_options:
                 st.session_state.sidebar_module_nav = nav_options[0]
 
@@ -135,9 +135,9 @@ def render_sidebar() -> Tuple[str, str, str]:
             p_count = 1 if st.session_state.get("learning_plan_output") else 0
 
             st.markdown(f"""
-            <div style="font-size: 0.8rem; color: #94a3b8; line-height: 1.8;">
+            <div style="font-size: 0.82rem; color: #94a3b8; line-height: 1.8;">
                 <div>• 💡 Concepts Explained: <b style="color: #38bdf8;">{c_count}</b></div>
-                <div>• ✍️ Active Questions: <b style="color: #a78bfa;">{q_count}</b></div>
+                <div>• ✍️ Active Questions: <b style="color: #c084fc;">{q_count}</b></div>
                 <div>• 💬 Doubts Discussed: <b style="color: #34d399;">{d_count}</b></div>
                 <div>• 🗺️ Learning Plans: <b style="color: #fbbf24;">{p_count}</b></div>
             </div>
@@ -168,16 +168,17 @@ def render_sidebar() -> Tuple[str, str, str]:
 
         # Connection Status
         if api_key:
-            st.markdown('<div style="text-align: center; margin-top: 8px;"><span class="badge-tag badge-green">🟢 Gemini 3.8 Connected</span></div>', unsafe_allow_html=True)
+            st.markdown('<div style="text-align: center; margin-top: 10px;"><span class="badge-tag badge-green">🟢 Gemini AI Connected</span></div>', unsafe_allow_html=True)
         else:
-            st.markdown('<div style="text-align: center; margin-top: 8px;"><span class="badge-tag badge-amber">⚠️ No Gemini API Key in .env</span></div>', unsafe_allow_html=True)
+            st.markdown('<div style="text-align: center; margin-top: 10px;"><span class="badge-tag badge-amber">⚠️ No Gemini Key (.env / secrets)</span></div>', unsafe_allow_html=True)
 
     return api_key, model_name, selected_module
 
 
 def render_export_buttons(title: str, markdown_content: str, key_prefix: str = "export"):
     """Renders 3-column export download buttons (.md, .txt, .html)."""
-    st.markdown("##### 📥 Export Study Package:")
+    st.markdown("<div style='margin-top: 18px;'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='font-weight: 700; font-size: 0.92rem; color: #f1f5f9; margin-bottom: 8px;'>📥 Export Study Package:</div>", unsafe_allow_html=True)
     col_d1, col_d2, col_d3 = st.columns(3)
     
     file_slug = title.lower().replace(" ", "_")[:30]
